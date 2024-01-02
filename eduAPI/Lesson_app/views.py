@@ -11,9 +11,14 @@ class CreateLessonView(generics.CreateAPIView):
     # queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
 
-    # def create(self, request, *args, **kwargs):
-    #     print("create methode called")
-    #     return super().create(request, *args, **kwargs)
+    def create(self, request, *args, **kwargs):
+        print("create methode called")
+        # print(request.data)
+        serializer = self.get_serializer(data=request.data,many=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'message':"all lessons are added"})
+        return Response({'message':serializer.errors})
 
 class ListLessonView(generics.ListAPIView):
     queryset = Lesson.objects.all()

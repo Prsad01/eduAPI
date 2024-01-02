@@ -5,7 +5,7 @@ from rest_framework.validators import UniqueTogetherValidator
 class LessonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lesson
-        fields = ['id','order','title','content','course']
+        fields = ['course','order','title','content','id' ]
 
         validators = [
             UniqueTogetherValidator(
