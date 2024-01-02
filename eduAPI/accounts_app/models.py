@@ -11,7 +11,7 @@ class User(AbstractUser):
         ('student', 'Student'),
         ('instructor', 'Instructor'),
     )
-    role = models.CharField(max_length=20, choices=ROLES, default='student')
+    role = models.CharField(max_length=20, choices=ROLES)
     date_of_birth = models.DateField(blank=True, null=True)
     bio = models.TextField(blank=True)
 
