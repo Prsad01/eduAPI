@@ -10,7 +10,7 @@ from rest_framework.response import Response
 class Enrollmentview(viewsets.ModelViewSet):
     serializer_class = EnrollmentSerializer
     queryset = Enrollment.objects.all()
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsStudent ]
 
     def get_permissions(self):
         self.permission_classes = [NoPermission]
