@@ -8,4 +8,5 @@ urlpatterns = [
     path('api/',include('Lesson_app.urls')),
     path('enrollment/', include('enrollment_app.urls')),
     path('assignment/',include('assignment_app.urls')),
+    path('submission/',include('submission_app.urls')),
 ]
