@@ -1,6 +1,11 @@
 from .models import User
 from rest_framework import serializers
 
+class UserSerializerWithLimitedFields(serializers.ModelSerializer):
+    class Meta:
+        fields = ('id','username','first_name','last_name','email','bio')
+        model = User
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User

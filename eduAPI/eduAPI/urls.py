@@ -9,4 +9,6 @@ urlpatterns = [
     path('enrollment/', include('enrollment_app.urls')),
     path('assignment/',include('assignment_app.urls')),
     path('submission/',include('submission_app.urls')),
+    path('review/',include('review_app.urls')),
+    
 ]

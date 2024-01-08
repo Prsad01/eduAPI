@@ -2,6 +2,16 @@ from .models import Submission
 # from assignment_app.models import Assignment
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
+from accounts_app.serializer import UserSerializerWithLimitedFields
+from assignment_app.serializers import AssignmentSerializer
+
+class SubmissionSerializerForRead(serializers.ModelSerializer):
+     student = UserSerializerWithLimitedFields()
+     assignment = AssignmentSerializer()
+     class Meta:
+          model = Submission
+          fields = ('id','student','assignment','content','submission_date','feedback')
+
 
 class SubmissionSrializer(serializers.ModelSerializer):
     class Meta:

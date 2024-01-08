@@ -8,7 +8,7 @@ from enrollment_app.models import Enrollment
 from Lesson_app.models import Lesson
 from django.shortcuts import get_object_or_404
 from rest_framework.exceptions import NotFound
-from .permissions import IsStudent
+from accounts_app.permissions import IsStudent
 
 class SubmissionView(viewsets.ModelViewSet):
     queryset = Submission.objects.all()
@@ -21,16 +21,16 @@ class SubmissionView(viewsets.ModelViewSet):
   
     def create(self, request, *args, **kwargs):
         data = {'student':request.user.id,
-                'assignment':request.data['assignment'],
+                'assignment':request.data.get('assignment'),
                 'content':request.data['content']
                 }
         
-        assignment = get_object_or_404(Assignment,pk=request.data['assignment'])
+        serializer = self.get_serializer(data=data)
+        assignment = get_object_or_404(Assignment,pk=request.data.get('assignment'))
         lesson = get_object_or_404(Lesson,pk=assignment.lesson.id)
         student_eligible = Enrollment.objects.filter(student = request.user.id , course = lesson.course ).exists()
 
         if student_eligible:
-            serializer = self.get_serializer(data=data)
             if serializer.is_valid():
                 serializer.save()
                 return Response({'message':serializer.data})
