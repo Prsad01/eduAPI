@@ -7,6 +7,7 @@ from django.shortcuts import get_object_or_404
 class CourseSerializers(serializers.ModelSerializer):
     instructor = serializers.CharField(source='instructor.username')
     email = serializers.CharField(source='instructor.email' , read_only=True)
+
     class Meta:
         model = Course
         fields = ['id','title','description','instructor','email','start_date','end_date']
@@ -22,7 +23,6 @@ class CourseSerializers(serializers.ModelSerializer):
         return value
     
     def update(self, instance, validated_data):
-        # print(validated_data)
         title = validated_data.get('title')
         description = validated_data.get('description')
         instructor = validated_data.get('instructor')

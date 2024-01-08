@@ -3,7 +3,7 @@ from assignment_app.models import Assignment
 from accounts_app.models import User
 
 class Submission(models.Model):
-    student = models.ForeignKey(User, on_delete=models.CASCADE)
+    student = models.ForeignKey(User, on_delete=models.CASCADE, related_name='submission')
     assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE)
     content = models.TextField()
     submission_date = models.DateField(auto_now_add=True)
