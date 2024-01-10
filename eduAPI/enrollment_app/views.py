@@ -1,21 +1,40 @@
 from django.shortcuts import render
 from .models import Enrollment
 from rest_framework import viewsets
-from .serializers import EnrollmentSerializer
-from .permissions import IsStudent, NoPermission
+from .serializers import EnrollmentWriteSerializer, EnrollmentReadSerializer
+from accounts_app.permissions import IsStudent, NoPermission, IsInstructor, InstrucatorOrStudent
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-
+from rest_framework.status import HTTP_401_UNAUTHORIZED, HTTP_400_BAD_REQUEST
 
 class Enrollmentview(viewsets.ModelViewSet):
-    serializer_class = EnrollmentSerializer
+    serializer_class = EnrollmentWriteSerializer
     queryset = Enrollment.objects.all()
-    permission_classes = [IsStudent ]
+    permission_classes = [IsAuthenticated]
+
+    def get_serializer(self, *args, **kwargs):
+        serializer_class = self.get_serializer_class()
+
+        if self.request.method == 'GET':
+            serializer_class = EnrollmentReadSerializer
+
+        else:
+            serializer_class = EnrollmentWriteSerializer
+
+        kwargs['context'] = {'request': self.request}
+        serializer = serializer_class(*args,**kwargs)
+
+        return serializer
 
     def get_permissions(self):
-        self.permission_classes = [NoPermission]
-        if self.request.user.role == 'student':
+        
+        if self.action == 'list' or self.action == 'retive':
+            self.permission_classes = [InstrucatorOrStudent]
+        elif self.action == 'destroy':
+            self.permission_classes = [NoPermission]
+        else:
             self.permission_classes = [IsStudent]
+        
         return [permission() for permission in self.permission_classes]
 
     def get_queryset(self):
@@ -24,11 +43,11 @@ class Enrollmentview(viewsets.ModelViewSet):
         return super().get_queryset()
     
     def create(self, request, *args, **kwargs):
-        data = {'student':request.user.id,'course':request.data['course']}
+        data = {'student':request.user.id,'course':request.data.get('course')}
+        print(request.user)
         serializer = self.get_serializer(data=data)
         if serializer.is_valid():
             serializer.save()
             return Response({'message':serializer.data})
-        return Response({'message':serializer.errors})
+        return Response({'message':serializer.errors },status=HTTP_400_BAD_REQUEST)
 
-    # Need to work on it more just take course id and create record of enrollment
