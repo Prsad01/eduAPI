@@ -1,8 +1,15 @@
 from rest_framework import serializers
 from .models import Enrollment
 from rest_framework.validators import UniqueTogetherValidator
+from accounts_app.serializer import UserSerializerWithLimitedFields
 
-class EnrollmentSerializer(serializers.ModelSerializer):
+class EnrollmentReadSerializer(serializers.ModelSerializer):
+    student = UserSerializerWithLimitedFields()
+    class Meta:
+        model = Enrollment
+        fields = ('id','student','course','enrollment_date','status')
+
+class EnrollmentWriteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Enrollment
         fields = ('id','student','course','enrollment_date','status')
@@ -17,5 +24,6 @@ class EnrollmentSerializer(serializers.ModelSerializer):
     ]
 
     # def create(self, validated_data):
-    #     print()
-    #     return super().create(validated_data)
+    #     print(self.context['request'])
+    #     return None
+    
