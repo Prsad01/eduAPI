@@ -1,6 +1,6 @@
 from django.db import models
 from Lesson_app.models import Lesson
-
+ 
 class Assignment(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()

@@ -5,6 +5,7 @@ from accounts_app.serializer import UserSerializer
 from django.shortcuts import get_object_or_404
 from accounts_app.serializer import UserSerializerWithLimitedFields
 
+
 class CourseReadSerializers(serializers.ModelSerializer):
     instructor = UserSerializerWithLimitedFields()
     class Meta:
