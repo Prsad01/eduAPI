@@ -6,6 +6,7 @@ from accounts_app.permissions import IsStudent, IsInstructor,InstrucatorOrStuden
 from enrollment_app.models import Enrollment
 from rest_framework.status import HTTP_400_BAD_REQUEST
 from django.shortcuts import get_object_or_404,get_list_or_404
+from accounts_app.permissions import InstrucatorOrStudent,IsInstructor
 
 class CreateLessonView(generics.CreateAPIView):
     # queryset = Lesson.objects.all()
@@ -46,6 +47,32 @@ class LessonRetriveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = LessonSerializer
     lookup_field = 'order'
 
+    def get_serializer(self, *args, **kwargs):
+        serializer_class = self.get_serializer_class()
+
+        kwargs['context'] = {'request': self.request,'course_id':self.kwargs['course_id']}
+        serializer = serializer_class(*args,**kwargs)
+
+        return serializer
+
+    def retrieve(self, request, *args, **kwargs):
+        course_id = self.kwargs['course_id']
+        if self.request.user.groups.filter(name='students_group').exists():
+
+            if Enrollment.objects.filter(student = self.request.user,course_id=course_id).exists():
+                serializer = self.get_serializer(self.get_queryset())
+                return Response(serializer.data)
+            else:
+                return Response({'details':'You did not subscribed given course'},status=HTTP_400_BAD_REQUEST)
+        return super().retrieve(request, *args, **kwargs)
+
+    def get_permissions(self):
+        if(self.request.method == 'GET'):
+            self.permission_classes = [InstrucatorOrStudent]
+        else:
+            self.permission_classes = [IsInstructor]
+        return [permission() for permission in self.permission_classes]
+    
     def destroy(self, request, *args, **kwargs):
         course_id = self.kwargs['course_id']
         order = self.kwargs['order']
@@ -59,5 +86,5 @@ class LessonRetriveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     def get_queryset(self):
         course_id = self.kwargs['course_id']
         order = self.kwargs['order']
-        return Lesson.objects.filter(course_id = course_id,order= order)
+        return Lesson.objects.filter(course_id = course_id,order = order)
     
