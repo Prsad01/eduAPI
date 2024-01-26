@@ -29,7 +29,8 @@ class CourserView(viewsets.ModelViewSet):
         return serializer   
 
     def get_permissions(self): 
-        if self.action == 'list' or self.action == 'retive':
+        print("from course permission")
+        if self.action == 'list' or self.action == 'retrieve':
             self.permission_classes = [AllowAny]
         else:
             self.permission_classes = [IsInstructor]
