@@ -63,13 +63,14 @@ class CourseSerializers(serializers.ModelSerializer):
         instructor = validated_data.pop('instructor')
         start_date = validated_data.pop('start_date')
         end_date = validated_data.pop('end_date')
-       
+        instructor = self.context['request'].user
         course = Course(
             title=title,
             description = description,
-            instructor_id = instructor['username'].id,
+            instructor_id = instructor.id,
             start_date = start_date,
-            end_date =end_date)
+            end_date =end_date
+            )
         
         # course.save()                     
         return course
