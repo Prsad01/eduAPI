@@ -18,7 +18,7 @@ class CourseSerializers(serializers.ModelSerializer):
 
     class Meta:
         model = Course
-        fields = ['id','title','description','instructor','start_date','end_date']
+        fields = ['id','title','description','start_date','end_date']
 
    
 
@@ -60,7 +60,6 @@ class CourseSerializers(serializers.ModelSerializer):
     def create(self, validated_data):
         title = validated_data.pop('title')
         description = validated_data.pop('description')
-        instructor = validated_data.pop('instructor')
         start_date = validated_data.pop('start_date')
         end_date = validated_data.pop('end_date')
         instructor = self.context['request'].user
@@ -72,5 +71,5 @@ class CourseSerializers(serializers.ModelSerializer):
             end_date =end_date
             )
         
-        # course.save()                     
+        course.save()                     
         return course
