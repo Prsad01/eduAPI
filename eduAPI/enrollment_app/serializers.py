@@ -2,9 +2,11 @@ from rest_framework import serializers
 from .models import Enrollment
 from rest_framework.validators import UniqueTogetherValidator
 from accounts_app.serializer import UserSerializerWithLimitedFields
+from courses_app.serializer import CourseReadSerializers
 
 class EnrollmentReadSerializer(serializers.ModelSerializer):
     student = UserSerializerWithLimitedFields()
+    course = CourseReadSerializers()
     class Meta:
         model = Enrollment
         fields = ('id','student','course','enrollment_date','status')
