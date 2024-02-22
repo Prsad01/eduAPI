@@ -3,9 +3,6 @@ import logging
 request_logs_path = ''
 response_log_path = ''
 
-
-
-
 class RequestLogging:
     def __init__(self,get_response) -> None:
         self.get_response = get_response
@@ -19,17 +16,18 @@ class RequestLogging:
         request_log_data = {
             'user':request.user.username,
             'method':request.method,
+            'path':request.path
         }
         self.request_logger.info(f"incoming request {request_log_data}")
 
         response_log_data = {
-            'status_code':response.status_code
+            'status_code':response.status_code,
+            'status':response.reason_phrase,
+            'content_type':response.content_type
         }
-        print()
         if response.status_code >= 400:
-            self.response_logger.error(f"Error {response.status_code}: {response.content}")
+            self.response_logger.error(f"Error {response_log_data}")
         else:
-            self.response_logger.info(f"Response {response.status_code}: {response.content}")
+            self.response_logger.info(f"Response {response_log_data}")
 
         return response
-        
