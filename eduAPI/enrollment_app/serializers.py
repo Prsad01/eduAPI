@@ -4,6 +4,7 @@ from rest_framework.validators import UniqueTogetherValidator
 from accounts_app.serializer import UserSerializerWithLimitedFields
 from courses_app.serializers import CourseReadSerializers
 
+
 class EnrollmentReadSerializer(serializers.ModelSerializer):
     student = UserSerializerWithLimitedFields()
     course = CourseReadSerializers()
@@ -24,8 +25,3 @@ class EnrollmentWriteSerializer(serializers.ModelSerializer):
             message= f"student is alredy register whith the given course"
         )
     ]
-
-    # def create(self, validated_data):
-    #     print(self.context['request'])
-    #     return None
-    

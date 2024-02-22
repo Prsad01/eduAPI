@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-^o-m@4m%72g)kr(5m0@q24=l0u8)f38_wqgpa%wxyg7be%q^_n'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -153,6 +153,43 @@ REST_FRAMEWORK = {
     ],
 
 }
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'standard': {
+            'format': '%(asctime)s - %(levelname)s - %(message)s'
+        },
+    },
+    'handlers': {
+        'request_file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': 'request.log',
+            'formatter': 'standard',
+        },
+        'response_file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': 'response.log',
+            'formatter': 'standard',
+        },
+    },
+    'loggers': {
+        'request_logger': {
+            'handlers': ['request_file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'response_logger': {
+            'handlers': ['response_file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}
+
 
 
 # settings.py
