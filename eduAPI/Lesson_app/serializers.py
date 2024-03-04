@@ -8,13 +8,13 @@ class LessonReadSerializer(serializers.ModelSerializer):
     course = CourseReadSerializers()
     class Meta:
         model = Lesson
-        fields = ['id','course','order','title','content','id' ]
+        fields = ['id','order','title','content','course']
 
 
 class LessonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lesson
-        fields = ['id','course','order','title','content','id' ]
+        fields = "__all__"
 
         validators = [
             UniqueTogetherValidator(

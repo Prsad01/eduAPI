@@ -16,28 +16,20 @@ class AssignmentSerializer(serializers.ModelSerializer):
         lesson_course = Lesson.objects.get(pk=lesson.id)
         return (Course.objects.filter( pk=lesson_course.course.id,instructor=request_user).exists())
     
-    # def update(self, instance, validated_data):
-    #     print("update called")
-    #     if not AssignmentSerializer.check_authority(self.context['request'],lesson):
-    #         raise serializers.ValidationError({'lesson':'You are not authorised to update Assignment for given Lesson','code':'102'})
-    #     return instance
-
-
     def create(self, validated_data):
         lesson = validated_data.get('lesson')
 
         if not AssignmentSerializer.check_authority(self.context['request'],lesson):
             raise serializers.ValidationError({'lesson':'You are not authorised to add Assignment for given Lesson','code':'101'})
        
-        # assignment  = Assignment(
-        #     title = validated_data.get('title'),
-        #     description = validated_data.get('description'),
-        #     due_date = validated_data.get('due_date'),
-        #     lesson_id = validated_data.get('lesson').id,
-        #     max_score = validated_data.get('max_score')
-        #     )
-        assignment  = Assignment(**validated_data)
-        # assignment.save()  
+        assignment  = Assignment(
+            title = validated_data.get('title'),
+            description = validated_data.get('description'),
+            due_date = validated_data.get('due_date'),
+            lesson_id = validated_data.get('lesson').id,
+            max_score = validated_data.get('max_score')
+            )
+        assignment.save()  
         return assignment
 
 class AssignmentReadSearializer(serializers.ModelSerializer):
