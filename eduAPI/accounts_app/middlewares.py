@@ -16,14 +16,17 @@ class RequestLogging:
         request_log_data = {
             'user':request.user.username,
             'method':request.method,
-            'path':request.path
+            'path':request.build_absolute_uri()
         }
         self.request_logger.info(f"incoming request {request_log_data}")
 
         response_log_data = {
+            'user':request.user.username,
+            'path':request.build_absolute_uri(),
             'status_code':response.status_code,
             'status':response.reason_phrase,
-            'content_type':response.content_type
+            'methode':request.method
+            # 'content_type':response.content_type
         }
         if response.status_code >= 400:
             self.response_logger.error(f"Error {response_log_data}")
