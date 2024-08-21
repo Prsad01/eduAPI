@@ -33,4 +33,6 @@ class RequestLogging:
         else:
             self.response_logger.info(f"Response {response_log_data}")
 
+
         return response
+       
