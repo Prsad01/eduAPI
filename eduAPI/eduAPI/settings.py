@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',
+    'drf_yasg',
     'corsheaders',
     'accounts_app',
     'courses_app',
@@ -46,7 +47,8 @@ INSTALLED_APPS = [
     'enrollment_app',
     'assignment_app',
     'submission_app',
-    'review_app'
+    'review_app',
+  
 ]
 
 MIDDLEWARE = [
@@ -58,6 +60,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'accounts_app.middlewares.RequestLogging'
 ]
 
 ROOT_URLCONF = 'eduAPI.urls'
@@ -138,7 +141,7 @@ AUTH_USER_MODEL = 'accounts_app.User'
 
 
 from datetime import timedelta
-...
+
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
@@ -157,3 +160,21 @@ REST_FRAMEWORK = {
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
 ]
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Basic': {
+            'type': 'basic'
+        }
+    }
+}
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+EMAIL_HOST_USER = 'prasadmande10@gmail.com'
+EMAIL_HOST_PASSWORD = 'usaw vujn vbsa hogf'
+DEFAULT_FROM_EMAIL = 'prasadmande10@gmail.com'

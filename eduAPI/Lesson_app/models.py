@@ -1,6 +1,7 @@
 from django.db import models
 from courses_app.models import Course
 
+
 class Lesson(models.Model):
     title = models.CharField(max_length=255)
     content = models.TextField()
@@ -10,3 +11,8 @@ class Lesson(models.Model):
 
     def __str__(self):
         return self.title
+    
+
+
+
+    

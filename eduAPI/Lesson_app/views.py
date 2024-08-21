@@ -8,15 +8,27 @@ from rest_framework.status import HTTP_400_BAD_REQUEST
 from django.shortcuts import get_object_or_404,get_list_or_404
 from accounts_app.permissions import InstrucatorOrStudent,IsInstructor
 
+
+from enrollment_app.models import Enrollment
+from accounts_app.models import User
+
+
+from Lesson_app.utilities.notifyLessonemail import lesson_Notification
+from django.core.mail import send_mail, send_mass_mail
+
+
 class CreateLessonView(generics.CreateAPIView):
     # queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
-    permission_classes = [IsInstructor]
+    #permission_classes = [IsInstructor]
 
     def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data,many=True)
+        serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            course = (request.data.get('course'))
+            student_data = Enrollment.objects.filter(course=course).values_list('student__email','student__first_name','course__title') 
+            # serializer.save()
+            lesson_Notification(student_data)
             return Response({'message':"all lessons are added"})
         return Response({'message':serializer.errors})
 
