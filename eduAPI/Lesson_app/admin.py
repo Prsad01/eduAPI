@@ -3,7 +3,7 @@ from .models import Lesson
 
 
 class LessonModelAdmin(admin.ModelAdmin):
-    list_display=['course','order','title']
+    list_display=['id','course','order','title']
     
 
 admin.site.register(Lesson,LessonModelAdmin)
